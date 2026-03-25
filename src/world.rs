@@ -1,3 +1,7 @@
 pub mod block;
-pub mod world_generation;
+pub mod worldgen;
 pub mod chunk;
+
+pub struct WorldData {
+
+}
