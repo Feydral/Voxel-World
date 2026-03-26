@@ -1,6 +1,6 @@
 use std::ops::*;
 
-#[derive(Copy, Clone, Debug, PartialEq, Default)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
 pub struct Int3 {
     pub x: i32,
     pub y: i32,
@@ -106,5 +106,19 @@ impl Div<i32> for Int3 {
 impl DivAssign<i32> for Int3 {
     fn div_assign(&mut self, rhs: i32) {
         self.x /= rhs; self.y /= rhs; self.z /= rhs;
+    }
+}
+
+// ======= REM =======
+impl Rem<i32> for Int3 {
+    type Output = Int3;
+    fn rem(self, rhs: i32) -> Int3 {
+        Int3 { x: self.x % rhs, y: self.y % rhs, z: self.z % rhs }
+    }
+}
+
+impl RemAssign<i32> for Int3 {
+    fn rem_assign(&mut self, rhs: i32) {
+        self.x %= rhs; self.y %= rhs; self.z %= rhs;
     }
 }

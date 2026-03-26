@@ -7,14 +7,19 @@ pub enum Block {
     DirtBlock,
     GrassBlock,
     StoneBlock,
-    CobbledStoneBlock,
 
     GrassLayer {
         height: u8,
     },
+
     Moos,
     MoosLayer {
         height: u8
     },
+
     Lichen,
+
+    SmallGrass,
+    Grass,
+    TallGrass,
 }

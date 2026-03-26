@@ -1,6 +1,6 @@
 use std::ops::*;
 
-#[derive(Copy, Clone, Debug, PartialEq, Default)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
 pub struct UInt2 {
     pub x: u32,
     pub y: u32,
@@ -105,5 +105,19 @@ impl Div<u32> for UInt2 {
 impl DivAssign<u32> for UInt2 {
     fn div_assign(&mut self, rhs: u32) {
         self.x /= rhs; self.y /= rhs;
+    }
+}
+
+// ======= REM =======
+impl Rem<u32> for UInt2 {
+    type Output = UInt2;
+    fn rem(self, rhs: u32) -> UInt2 {
+        UInt2 { x: self.x % rhs, y: self.y % rhs }
+    }
+}
+
+impl RemAssign<u32> for UInt2 {
+    fn rem_assign(&mut self, rhs: u32) {
+        self.x %= rhs; self.y %= rhs;
     }
 }
