@@ -38,31 +38,31 @@ impl WorldData {
     }
 
     pub fn set_block(&mut self, world_pos: Int3, block: Block) {
-        let chunk_pos = world_pos / ChunkData::SIZE as i32;
-        let local_pos = world_pos % ChunkData::SIZE as i32;
+        let chunk_pos = world_pos.div_euclid(ChunkData::SIZE as i32);
+        let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
         if let Some(chunk) = self.chunks.get_mut(&chunk_pos) {
             chunk.set_block(local_pos, block);
         }
     }
-
+    
     pub fn set_block_or_generate(&mut self, world_pos: Int3, block: Block) {
-        let chunk_pos = world_pos / ChunkData::SIZE as i32;
-        let local_pos = world_pos % ChunkData::SIZE as i32;
+        let chunk_pos = world_pos.div_euclid(ChunkData::SIZE as i32);
+        let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
         self.generate_chunk(chunk_pos, false);
         if let Some(chunk) = self.chunks.get_mut(&chunk_pos) {
             chunk.set_block(local_pos, block);
         }
     }
-
+    
     pub fn get_block(&self, world_pos: Int3) -> Option<Block> {
-        let chunk_pos = world_pos / ChunkData::SIZE as i32;
-        let local_pos = world_pos % ChunkData::SIZE as i32;
+        let chunk_pos = world_pos.div_euclid(ChunkData::SIZE as i32);
+        let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
         Some(self.chunks.get(&chunk_pos)?.get_block(local_pos))
     }
-
+    
     pub fn get_block_or_generate(&mut self, world_pos: Int3) -> Block {
-        let chunk_pos = world_pos / ChunkData::SIZE as i32;
-        let local_pos = world_pos % ChunkData::SIZE as i32;
+        let chunk_pos = world_pos.div_euclid(ChunkData::SIZE as i32);
+        let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
         self.generate_chunk(chunk_pos, false);
         self.chunks.get(&chunk_pos).unwrap().get_block(local_pos)
     }

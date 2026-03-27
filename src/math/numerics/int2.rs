@@ -10,6 +10,20 @@ impl Int2 {
     pub const fn new(x: i32, y: i32) -> Int2 {
         Int2 { x, y }
     }
+
+    pub fn div_euclid(self, rhs: i32) -> Int2 {
+        Int2 {
+            x: self.x.div_euclid(rhs),
+            y: self.y.div_euclid(rhs),
+        }
+    }
+    
+    pub fn rem_euclid(self, rhs: i32) -> Int2 {
+        Int2 {
+            x: self.x.rem_euclid(rhs),
+            y: self.y.rem_euclid(rhs),
+        }
+    }
 }
 
 // ======= ADD ======= 

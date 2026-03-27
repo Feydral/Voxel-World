@@ -12,6 +12,24 @@ impl Int4 {
     pub const fn new(x: i32, y: i32, z: i32, w: i32) -> Int4 {
         Int4 { x, y, z, w }
     }
+
+    pub fn div_euclid(self, rhs: i32) -> Int4 {
+        Int4 {
+            x: self.x.div_euclid(rhs),
+            y: self.y.div_euclid(rhs),
+            z: self.z.div_euclid(rhs),
+            w: self.w.div_euclid(rhs),
+        }
+    }
+    
+    pub fn rem_euclid(self, rhs: i32) -> Int4 {
+        Int4 {
+            x: self.x.rem_euclid(rhs),
+            y: self.y.rem_euclid(rhs),
+            z: self.z.rem_euclid(rhs),
+            w: self.w.rem_euclid(rhs),
+        }
+    }
 }
 
 // ======= ADD ======= 
