@@ -1,4 +1,4 @@
-use crate::{math::{mathi, numerics::int3::Int3}, world::block::Block};
+use crate::{math::numerics::int3::Int3, world::block::Block};
 
 pub struct ChunkData {
     blocks: [Block; (Self::SIZE * Self::SIZE * Self::SIZE) as usize],
