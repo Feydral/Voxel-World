@@ -1,6 +1,8 @@
 #[repr(u16)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Block {
+    Debug,
+
     Void,
     Air,
 
