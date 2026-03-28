@@ -73,102 +73,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_set_get_block_positive() {
-        let mut world = WorldData::new();
-        let pos = Int3::new(1, 0, 1);
-        world.set_block_or_create(pos, Block::Debug);
-        assert_eq!(world.get_block(pos), Some(Block::Debug));
-    }
-
-    #[test]
-    fn test_set_get_block_negative() {
-        let mut world = WorldData::new();
-        let pos = Int3::new(-1, 0, -1);
-        world.set_block_or_create(pos, Block::Debug);
-        assert_eq!(world.get_block(pos), Some(Block::Debug));
-    }
-
-    #[test]
-    fn test_chunk_boundary() {
-        let mut world = WorldData::new();
-        let a = Int3::new(31, 0, 0);
-        let b = Int3::new(32, 0, 0);
-        world.set_block_or_create(a, Block::Debug);
-        world.set_block_or_create(b, Block::Debug);
-        assert_eq!(world.get_block(a), Some(Block::Debug));
-        assert_eq!(world.get_block(b), Some(Block::Debug));
-    }
-
-    #[test]
-    fn test_negative_chunk_boundary() {
-        let mut world = WorldData::new();
-        let a = Int3::new(-1, 0, 0);
-        let b = Int3::new(-32, 0, 0);
-        let c = Int3::new(-33, 0, 0);
-        world.set_block_or_create(a, Block::Debug);
-        world.set_block_or_create(b, Block::Debug);
-        world.set_block_or_create(c, Block::Debug);
-        assert_eq!(world.get_block(a), Some(Block::Debug));
-        assert_eq!(world.get_block(b), Some(Block::Debug));
-        assert_eq!(world.get_block(c), Some(Block::Debug));
-    }
-
-    #[test]
-    fn test_blocks_dont_alias() {
-        let mut world = WorldData::new();
-        let a = Int3::new(0, 0, 0);
-        let b = Int3::new(1, 0, 0);
-        world.set_block_or_create(a, Block::Debug);
-        world.set_block_or_create(b, Block::Void);
-        assert_eq!(world.get_block(a), Some(Block::Debug));
-    }
-
-    #[test]
-    fn test_internal_chunk_pos_positive() {
-        let mut world = WorldData::new();
-        world.set_block_or_create(Int3::new(33, 0, 0), Block::Debug);
-        let chunk = world.get_chunk(Int3::new(1, 0, 0)).unwrap();
-        assert_eq!(chunk.get_block(Int3::new(1, 0, 0)), Block::Debug);
-    }
-
-    #[test]
-    fn test_internal_chunk_pos_origin() {
-        let mut world = WorldData::new();
-        world.set_block_or_create(Int3::new(0, 0, 0), Block::Debug);
-        let chunk = world.get_chunk(Int3::new(0, 0, 0)).unwrap();
-        assert_eq!(chunk.get_block(Int3::new(0, 0, 0)), Block::Debug);
-    }
-
-    #[test]
-    fn test_internal_chunk_pos_last_in_chunk() {
-        let mut world = WorldData::new();
-        world.set_block_or_create(Int3::new(31, 0, 0), Block::Debug);
-        let chunk = world.get_chunk(Int3::new(0, 0, 0)).unwrap();
-        assert_eq!(chunk.get_block(Int3::new(31, 0, 0)), Block::Debug);
-    }
-
-    #[test]
-    fn test_internal_chunk_pos_negative() {
-        let mut world = WorldData::new();
-        world.set_block_or_create(Int3::new(-1, 0, 0), Block::Debug);
-        let chunk = world.get_chunk(Int3::new(-1, 0, 0)).unwrap();
-        assert_eq!(chunk.get_block(Int3::new(31, 0, 0)), Block::Debug);
-    }
-
-    #[test]
-    fn test_internal_chunk_pos_negative_boundary() {
-        let mut world = WorldData::new();
-        world.set_block_or_create(Int3::new(-32, 0, 0), Block::Debug);
-        let chunk = world.get_chunk(Int3::new(-1, 0, 0)).unwrap();
-        assert_eq!(chunk.get_block(Int3::new(0, 0, 0)), Block::Debug);
-    }
-
-    #[test]
-    fn test_internal_chunk_pos_negative_second_chunk() {
-        let mut world = WorldData::new();
-        world.set_block_or_create(Int3::new(-33, 0, 0), Block::Debug);
-        let chunk = world.get_chunk(Int3::new(-2, 0, 0)).unwrap();
-        assert_eq!(chunk.get_block(Int3::new(31, 0, 0)), Block::Debug);
+    fn test_get_block_nonexistent_chunk_returns_none() {
+        let world = WorldData::new();
+        assert_eq!(world.get_block(Int3::new(0, 0, 0)), None);
     }
 
     #[test]
@@ -181,8 +88,59 @@ mod tests {
     }
 
     #[test]
-    fn test_get_block_nonexistent_chunk() {
-        let world = WorldData::new();
-        assert_eq!(world.get_block(Int3::new(0, 0, 0)), None);
+    fn test_adjacent_blocks_dont_alias() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(0, 0, 0), Block::Debug);
+        world.set_block_or_create(Int3::new(1, 0, 0), Block::Void);
+        assert_eq!(world.get_block(Int3::new(0, 0, 0)), Some(Block::Debug));
+    }
+
+    #[test]
+    fn test_set_block_calc_origin() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(0, 0, 0), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(0, 0, 0)).unwrap().get_block(Int3::new(0, 0, 0)), Block::Debug);
+    }
+
+    #[test]
+    fn test_set_block_calc_last_in_chunk() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(31, 0, 0), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(0, 0, 0)).unwrap().get_block(Int3::new(31, 0, 0)), Block::Debug);
+    }
+
+    #[test]
+    fn test_set_block_calc_first_in_second_chunk() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(32, 0, 0), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(1, 0, 0)).unwrap().get_block(Int3::new(0, 0, 0)), Block::Debug);
+    }
+
+    #[test]
+    fn test_set_block_calc_first_negative() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(-1, 0, 0), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(-1, 0, 0)).unwrap().get_block(Int3::new(31, 0, 0)), Block::Debug);
+    }
+
+    #[test]
+    fn test_set_block_calc_negative_chunk_boundary() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(-32, 0, 0), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(-1, 0, 0)).unwrap().get_block(Int3::new(0, 0, 0)), Block::Debug);
+    }
+
+    #[test]
+    fn test_get_block_calc_positive() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(33, 0, 0), Block::Debug);
+        assert_eq!(world.get_block(Int3::new(33, 0, 0)), Some(Block::Debug));
+    }
+
+    #[test]
+    fn test_get_block_calc_negative() {
+        let mut world = WorldData::new();
+        world.set_block_or_create(Int3::new(-33, 0, 0), Block::Debug);
+        assert_eq!(world.get_block(Int3::new(-33, 0, 0)), Some(Block::Debug));
     }
 }
