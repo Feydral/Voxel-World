@@ -1,9 +1,9 @@
-use crate::world::{WorldData, chunk::ChunkData};
+use crate::{math::numerics::int3::Int3, world::WorldData};
 
 mod world;
 mod math;
 
 fn main() {
-    println!("sizeof(ChunkData): {} bytes", std::mem::size_of::<ChunkData>());
-    println!("sizeof(WorldData): {} bytes", std::mem::size_of::<WorldData>());
+    let mut world = WorldData::new();
+    world.create_chunk(Int3::new(0, 0, 0), false);
 }
