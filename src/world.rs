@@ -1,25 +1,27 @@
-use std::collections::HashMap;
-
-use crate::{math::numerics::int3::Int3, world::{block::Block, chunk::ChunkData}};
-
 pub mod block;
 pub mod worldgen;
 pub mod chunk;
 
+use std::collections::HashMap;
+
+use crate::{math::numerics::int3::Int3, world::{block::Block, chunk::ChunkData, worldgen::TerrainGenerator}};
+
 pub struct WorldData {
     chunks: HashMap<Int3, ChunkData>,
+    terrain_generator: TerrainGenerator,
 }
 
 impl WorldData {
     pub fn new() -> Self {
         WorldData { 
             chunks: HashMap::new(),
+            terrain_generator: TerrainGenerator::new(1),
         }
     }
 
     pub fn create_chunk(&mut self, position: Int3, overwrite: bool) {
         if overwrite || !self.chunks.contains_key(&position) {
-            let chunk = worldgen::generate_chunk(position);
+            let chunk = self.terrain_generator.generate_chunk(position);
             self.chunks.insert(position, chunk);
         }
     }

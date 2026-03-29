@@ -5,18 +5,14 @@ pub struct TerrainGenerator {
     noise: OpenSimplexNoise,
     scale: f64,
     amplitude: f64,
-    cave_scale: f64,
-    cave_threshold: f64,
 }
 
 impl TerrainGenerator {
     pub fn new(seed: i64) -> Self {
         Self {
             noise: OpenSimplexNoise::new(Some(seed)),
-            scale: 0.01,
+            scale: 0.1,
             amplitude: 32.0,
-            cave_scale: 0.05,
-            cave_threshold: 0.4,
         }
     }
 
