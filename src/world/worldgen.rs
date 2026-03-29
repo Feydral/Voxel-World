@@ -17,15 +17,12 @@ impl TerrainGenerator {
     }
 
     fn surface_height(&self, world_x: i32, world_z: i32) -> i32 {
-        let n = self.noise.eval_2d(
-            world_x as f64 * self.scale,
-            world_z as f64 * self.scale,
-        );
+        let n = self.noise.eval_2d(world_x as f64 * self.scale, world_z as f64 * self.scale);
         ((n + 1.0) * 0.5 * self.amplitude) as i32
     }
 
     pub fn generate_chunk(&self, position: Int3) -> ChunkData {
-        let mut chunk = ChunkData::new_empty();
+        let mut chunk = ChunkData::new();
 
         for x in 0..ChunkData::SIZE {
             for z in 0..ChunkData::SIZE {

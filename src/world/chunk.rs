@@ -7,13 +7,7 @@ pub struct ChunkData {
 impl ChunkData {
     pub const SIZE: u32 = 32;
 
-    pub fn new(filler: Block) -> Self {
-        Self { 
-            blocks: [filler; (Self::SIZE * Self::SIZE * Self::SIZE) as usize],
-        }
-    }
-
-    pub fn new_empty() -> Self {
+    pub fn new() -> Self {
         Self { 
             blocks: [Block::Void; (Self::SIZE * Self::SIZE * Self::SIZE) as usize],
         }
