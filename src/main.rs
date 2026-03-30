@@ -1,10 +1,11 @@
 mod world;
 mod math;
 mod canvas;
+mod input;
 
 use crossterm::event::KeyCode;
 
-use crate::{canvas::{Canvas, input::Input}, math::numerics::int3::Int3, world::WorldData};
+use crate::{canvas::Canvas, input::Input, math::numerics::int3::Int3, world::WorldData};
 
 fn main() {
     let mut world = WorldData::new();
