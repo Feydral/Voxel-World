@@ -43,7 +43,7 @@ impl WorldData {
         let chunk_pos = world_pos.div_euclid(ChunkData::SIZE as i32);
         let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
         if let Some(chunk) = self.chunks.get_mut(&chunk_pos) {
-            chunk.set_block(local_pos, block);
+            chunk.set_block(local_pos.to_uint3(), block);
         }
     }
 
@@ -52,26 +52,28 @@ impl WorldData {
         let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
         self.create_chunk(chunk_pos, false);
         if let Some(chunk) = self.chunks.get_mut(&chunk_pos) {
-            chunk.set_block(local_pos, block);
+            chunk.set_block(local_pos.to_uint3(), block);
         }
     }
 
     pub fn get_block(&self, world_pos: Int3) -> Option<Block> {
         let chunk_pos = world_pos.div_euclid(ChunkData::SIZE as i32);
         let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
-        Some(self.chunks.get(&chunk_pos)?.get_block(local_pos))
+        Some(self.chunks.get(&chunk_pos)?.get_block(local_pos.to_uint3()))
     }
 
     pub fn get_block_or_create(&mut self, world_pos: Int3) -> Block {
         let chunk_pos = world_pos.div_euclid(ChunkData::SIZE as i32);
         let local_pos = world_pos.rem_euclid(ChunkData::SIZE as i32);
         self.create_chunk(chunk_pos, false);
-        self.chunks.get(&chunk_pos).unwrap().get_block(local_pos)
+        self.chunks.get(&chunk_pos).unwrap().get_block(local_pos.to_uint3())
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::math::numerics::uint3::UInt3;
+
     use super::*;
 
     #[test]
@@ -101,35 +103,35 @@ mod tests {
     fn test_set_block_calc_origin() {
         let mut world = WorldData::new();
         world.set_block_or_create(Int3::new(0, 0, 0), Block::Debug);
-        assert_eq!(world.get_chunk(Int3::new(0, 0, 0)).unwrap().get_block(Int3::new(0, 0, 0)), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(0, 0, 0)).unwrap().get_block(UInt3::new(0, 0, 0)), Block::Debug);
     }
 
     #[test]
     fn test_set_block_calc_last_in_chunk() {
         let mut world = WorldData::new();
         world.set_block_or_create(Int3::new(31, 0, 0), Block::Debug);
-        assert_eq!(world.get_chunk(Int3::new(0, 0, 0)).unwrap().get_block(Int3::new(31, 0, 0)), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(0, 0, 0)).unwrap().get_block(UInt3::new(31, 0, 0)), Block::Debug);
     }
 
     #[test]
     fn test_set_block_calc_first_in_second_chunk() {
         let mut world = WorldData::new();
         world.set_block_or_create(Int3::new(32, 0, 0), Block::Debug);
-        assert_eq!(world.get_chunk(Int3::new(1, 0, 0)).unwrap().get_block(Int3::new(0, 0, 0)), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(1, 0, 0)).unwrap().get_block(UInt3::new(0, 0, 0)), Block::Debug);
     }
 
     #[test]
     fn test_set_block_calc_first_negative() {
         let mut world = WorldData::new();
         world.set_block_or_create(Int3::new(-1, 0, 0), Block::Debug);
-        assert_eq!(world.get_chunk(Int3::new(-1, 0, 0)).unwrap().get_block(Int3::new(31, 0, 0)), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(-1, 0, 0)).unwrap().get_block(UInt3::new(31, 0, 0)), Block::Debug);
     }
 
     #[test]
     fn test_set_block_calc_negative_chunk_boundary() {
         let mut world = WorldData::new();
         world.set_block_or_create(Int3::new(-32, 0, 0), Block::Debug);
-        assert_eq!(world.get_chunk(Int3::new(-1, 0, 0)).unwrap().get_block(Int3::new(0, 0, 0)), Block::Debug);
+        assert_eq!(world.get_chunk(Int3::new(-1, 0, 0)).unwrap().get_block(UInt3::new(0, 0, 0)), Block::Debug);
     }
 
     #[test]

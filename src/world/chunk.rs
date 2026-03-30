@@ -1,4 +1,4 @@
-use crate::{math::numerics::int3::Int3, world::block::Block};
+use crate::{math::numerics::uint3::UInt3, world::block::Block};
 
 pub struct ChunkData {
     blocks: [Block; (Self::SIZE * Self::SIZE * Self::SIZE) as usize],
@@ -13,13 +13,13 @@ impl ChunkData {
         }
     }
 
-    pub fn get_block(&self, position: Int3) -> Block {
-        let index = (position.x + position.y * Self::SIZE as i32 + position.z * Self::SIZE as i32 * Self::SIZE as i32) as usize;
+    pub fn get_block(&self, position: UInt3) -> Block {
+        let index = (position.x + position.y * Self::SIZE + position.z * Self::SIZE * Self::SIZE) as usize;
         self.blocks[index]
     }
     
-    pub fn set_block(&mut self, position: Int3, block: Block) {
-        let index = (position.x + position.y * Self::SIZE as i32 + position.z * Self::SIZE as i32 * Self::SIZE as i32) as usize;
+    pub fn set_block(&mut self, position: UInt3, block: Block) {
+        let index = (position.x + position.y * Self::SIZE + position.z * Self::SIZE * Self::SIZE) as usize;
         self.blocks[index] = block;
     }
 }

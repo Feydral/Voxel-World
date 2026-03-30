@@ -1,5 +1,7 @@
 use std::ops::*;
 
+use crate::math::numerics::uint2::UInt2;
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
 pub struct Int2 {
     pub x: i32,
@@ -22,6 +24,13 @@ impl Int2 {
         Int2 {
             x: self.x.rem_euclid(rhs),
             y: self.y.rem_euclid(rhs),
+        }
+    }
+
+    pub fn to_uint2(self) -> UInt2 {
+        UInt2 {
+            x: self.x as u32,
+            y: self.y as u32,
         }
     }
 }

@@ -1,5 +1,7 @@
 use std::ops::*;
 
+use crate::math::numerics::uint3::UInt3;
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
 pub struct Int3 {
     pub x: i32,
@@ -25,6 +27,14 @@ impl Int3 {
             x: self.x.rem_euclid(rhs),
             y: self.y.rem_euclid(rhs),
             z: self.z.rem_euclid(rhs),
+        }
+    }
+
+    pub fn to_uint3(self) -> UInt3 {
+        UInt3 {
+            x: self.x as u32,
+            y: self.y as u32,
+            z: self.z as u32,
         }
     }
 }

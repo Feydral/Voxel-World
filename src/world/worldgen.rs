@@ -1,5 +1,5 @@
 use opensimplex_noise_rs::OpenSimplexNoise;
-use crate::{math::numerics::int3::Int3, world::{block::Block, chunk::ChunkData}};
+use crate::{math::numerics::{int3::Int3, uint3::UInt3}, world::{block::Block, chunk::ChunkData}};
 
 pub struct TerrainGenerator {
     noise: OpenSimplexNoise,
@@ -43,7 +43,7 @@ impl TerrainGenerator {
                         Block::StoneBlock
                     };
 
-                    chunk.set_block(Int3::new(x as i32, y as i32, z as i32), block);
+                    chunk.set_block(UInt3::new(x, y, z), block);
                 }
             }
         }

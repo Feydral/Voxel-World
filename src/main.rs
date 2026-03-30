@@ -5,7 +5,7 @@ mod input;
 
 use crossterm::event::KeyCode;
 
-use crate::{canvas::Canvas, input::Input, math::numerics::int3::Int3, world::{WorldData, block::Block, chunk::ChunkData}};
+use crate::{canvas::Canvas, input::Input, math::numerics::{int3::Int3, uint3::UInt3}, world::{WorldData, block::Block, chunk::ChunkData}};
 
 fn main() {
     let mut world = WorldData::new();
@@ -13,7 +13,6 @@ fn main() {
     let mut canvas = Canvas::new();
     let mut input = Input::new();
 
-    world.create_chunk(Int3::new(0, 0, 0), false);
     let chunk = world.get_chunk_or_create(Int3::new(0, 0, 0));
 
     let mut current_slice = 0;
@@ -27,7 +26,7 @@ fn main() {
 
         for x in 0..ChunkData::SIZE {
             for y in 0..ChunkData::SIZE {
-                let block = chunk.get_block(Int3::new(x as i32, y as i32, current_slice));
+                let block = chunk.get_block(UInt3::new(x, y, current_slice));
 
                 use math::mathi::rgb_to_u32 as color;
 

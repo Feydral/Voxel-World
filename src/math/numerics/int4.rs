@@ -1,5 +1,7 @@
 use std::ops::*;
 
+use crate::math::numerics::uint4::UInt4;
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default, Hash)]
 pub struct Int4 {
     pub x: i32,
@@ -28,6 +30,15 @@ impl Int4 {
             y: self.y.rem_euclid(rhs),
             z: self.z.rem_euclid(rhs),
             w: self.w.rem_euclid(rhs),
+        }
+    }
+
+    pub fn to_uint4(self) -> UInt4 {
+        UInt4 {
+            x: self.x as u32,
+            y: self.y as u32,
+            z: self.z as u32,
+            w: self.w as u32,
         }
     }
 }
