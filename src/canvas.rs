@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crossterm::terminal;
 use std::io::{Write, stdout};
 
