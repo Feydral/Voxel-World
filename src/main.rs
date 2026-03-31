@@ -2,6 +2,7 @@ mod world;
 mod math;
 mod canvas;
 mod input;
+mod renderer;
 
 use crossterm::event::KeyCode;
 
