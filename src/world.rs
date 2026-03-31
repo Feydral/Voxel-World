@@ -1,6 +1,7 @@
 pub mod block;
 pub mod worldgen;
 pub mod chunk;
+pub mod chunk_render;
 
 use std::collections::HashMap;
 
